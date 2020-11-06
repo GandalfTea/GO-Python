@@ -1,2 +1,3 @@
 # PythonGame
-Project for school. Python Game with NN.
+
+Project for U30838-20YR Programming Fundamentals. Python Game with NN.
