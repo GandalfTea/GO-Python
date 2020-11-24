@@ -14,18 +14,15 @@ class st:
 
     def nb(self):
        for st in allst:
-           print("I will tel you a secreat.")
+           #print("I will tel you a secreat.")
            if self.x == st.x or self.y == st.y or self.x == st.y or self.y == st.x:
-                print("I was the wierd duck")
+                #print("I was the wierd duck")
                 lnb.append(st)
 
     def nb_all():
         for st in lnb:
             print(st.x, " ", st.y)
 
-    # check neighbours
-    # store neighbours if stones
-    # if two similar coordinates, store in container.
     # if container reaches the initial value, it is circle.
 
 a = st(3,4)
