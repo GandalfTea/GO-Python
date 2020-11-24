@@ -1,3 +1,3 @@
 # PythonGame
 
-Project for U30838-20YR Programming Fundamentals. Python Game with NN.
+Project for U30838 Programming Fundamentals. Python Game with NN.
