@@ -6,7 +6,6 @@ class st:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.nb()
         self.lnb = self.nb()
         allst.append(self)
         print("string x :", x, "string y :", y)
@@ -20,6 +19,7 @@ class st:
                 lnb.append(st)
         return lnb
 
+    # Debug, print all neighbours
     def nb_all(self):
         if self.lnb is not None:
             for st in self.lnb:
