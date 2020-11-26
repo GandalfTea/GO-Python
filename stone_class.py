@@ -25,21 +25,21 @@ class st:
            if self.x == st.x or self.y == st.y or self.x == st.y or self.y == st.x:
                 #print("I was the wierd duck")
                 lnb.append(st)
-        
-        def iter:
-            # iterating the nb:
-            for nb in lnb:
-                if nb.x == self.x and nb.y == self.y:
-                    return 1
-                nb.nb()
 
         return lnb
+
+    def iter:
+        # iterating the nb:
+        for nb in lnb:
+            if nb.x == self.x and nb.y == self.y:
+                return nb
 
     # Debug, print all neighbours
     def nb_all(self):
         if self.lnb is not None:
             for st in self.lnb:
                 print(st.x, " ", st.y)
+            nb.nb()
 
 
 class stplayer:
@@ -58,7 +58,7 @@ class stplayer:
     for st in self.container:
         if self.nb() is not None:
             for nb in self.nb():
-                
+                #iterate   
 
     # iterate all objects in container
     # start a recursive string through all the objects to their neighbours
