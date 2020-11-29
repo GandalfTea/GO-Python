@@ -7,8 +7,9 @@ class st:
     def __init__(self):
         self.x = 0
         self.y = 0
+        self._all_nb = []
+
         allst.append(self)
-        
 
     def pl(self, x, y):
         self.x = x
@@ -26,19 +27,25 @@ class st:
            if self.x == st.x or self.y == st.y or self.x == st.y or self.y == st.x:
                 #print("I was the wierd duck")
                 lnb.append(st)
-
         return lnb
 
-    def iter():
+
+    def iter(self):
 
         # iterating the function in nb:
         # store all connecting st in list than check positions.
         temp_nb = []    # hold stone to not iretate same again.
-        all_nb = []     # hold all connectiong stones.
-       
+        temp_nb.append(self)
+            
+        # iter ending function     
+        for temp in temp_np:
+            if self.x == temp.x and self.y == temp.y:
+                return temp
+
+        # add all connecting stones to _nb_all
         for nb in lnb:
-            if nb.x == self.x and nb.y == self.y:
-                return nb
+            if nb not in temp_nb:
+                self._all_nb.append(nb.iter()) 
             
 
     # Debug, print all neighbours
