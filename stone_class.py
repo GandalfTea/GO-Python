@@ -31,6 +31,7 @@ class st:
 
 
     def _iter(self):
+        # TODO: Measure time by : import time
         temp_nb = []    # hold stone to not iretate same again.
         hold_nb = []    # temp hold all_nb for stone
         temp_nb.append(self)
