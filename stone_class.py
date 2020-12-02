@@ -12,16 +12,16 @@ class st:
         _all_st.append(self)
 
     def __str__(self):
-        if self in _pl_str:
-            return "X : " + self.x + " Y : " + self.y
+        if self in _pl_st:
+            return "X : " + str(self.x) + ", Y : " + str(self.y)
         else:
             raise Exception("The stone has not been played yet.")
 
     def pl(self, x, y):
         self.x = x
         self.y = y
-        self.lnb = self.nb()
         _pl_st.append(self)
+        self.lnb = self.nb()
         #print("string x :", x, "string y :", y)
 
     def nb(self):
@@ -42,7 +42,10 @@ class st:
                 lnb.append(st)
             else:
                 continue
-       return lnb
+            for i in lnb:
+                print("Main : ", self)
+                print(i)
+        return lnb
 
 
     def _iter(self):
@@ -50,29 +53,46 @@ class st:
         temp_nb = []    # hold stone to not iretate same again.
         hold_nb = []    # temp hold all_nb for stone
         temp_nb.append(self)
-           
+        oX = self.x
+        oY = self.y
             # Propagate the function to all connected neighbours
-            def _feedforward(self, o_x, o_y, hold_nb):
-                feed_hold = []
-                if self.x == o_x and self.y == o_y:
-                    return 
-
-                # add all connecting stones to _nb_all
-                for nb in lnb:
-                    if nb not in temp_nb:
-                        feed_hold.append(nb)
-                    else:
-                        continue
+        def _feedforward(self, o_x, o_y, hold_nb):
+            feed_hold = []
+            feed_hold.append(self)
+            # End of recursion
+            if self.x == o_x and self.y == o_y:
                 return feed_hold
+            # add all connecting stones to _nb_all
+            for nb in lnb:
+                if nb not in temp_nb:
+                    feed_hold.append(_feedforward(nb, oX, oY, hold_nb))
+                else:
+                    continue
+            return feed_hold
+        temp_nb.append(_feedforward(self, oX, oY, hold_nb))
+
+        for i in temp_nb:
+            print("\n")
+            print(i)
 
     # Debug, print all neighbours
     def nb_all(self):
         if self.lnb is not None:
             for st in self.lnb:
+                print('dicks')
 
+a = st()
+b = st()
+c = st()
+d = st()
+a.pl(2,5)
+b.pl(2,4)
+c.pl(1,5)
+d.pl(1,6)
+a._iter()
 
 class st_player:
-
+    
     def __init__(self, color):
         
         if color == "b":
