@@ -22,6 +22,9 @@ class st:
         self.y = y
         _pl_st.append(self)
         self.lnb = self.nb()
+        #refreshes the nb of the neighbours
+        for i in self.lnb:
+            i.lnb = i.nb()
         #print("string x :", x, "string y :", y)
 
     def nb(self):
@@ -42,9 +45,7 @@ class st:
                 lnb.append(st)
             else:
                 continue
-            for i in lnb:
-                print("Main : ", self)
-                print(i)
+
         return lnb
 
 
@@ -55,31 +56,36 @@ class st:
         temp_nb.append(self)
         oX = self.x
         oY = self.y
-            # Propagate the function to all connected neighbours
-        def _feedforward(self, o_x, o_y, hold_nb):
+
+        # Propagate the function to all connected neighbours
+        def _feed_forward(self, o_x, o_y, temp_nb):
             feed_hold = []
             feed_hold.append(self)
             # End of recursion
             if self.x == o_x and self.y == o_y:
+                print("This does not work")
                 return feed_hold
             # add all connecting stones to _nb_all
-            for nb in lnb:
+            for nb in self.lnb:
                 if nb not in temp_nb:
                     feed_hold.append(_feedforward(nb, oX, oY, hold_nb))
+                    print("currently at : ", nb)
                 else:
                     continue
             return feed_hold
-        temp_nb.append(_feedforward(self, oX, oY, hold_nb))
 
+        for nb in self.lnb:
+            hold_nb.append(_feed_forward(nb, oX, oY, hold_nb))
+        
+        print("\n_iter:")
         for i in temp_nb:
-            print("\n")
             print(i)
 
     # Debug, print all neighbours
     def nb_all(self):
         if self.lnb is not None:
             for st in self.lnb:
-                print('dicks')
+                print(st)
 
 a = st()
 b = st()
@@ -87,10 +93,9 @@ c = st()
 d = st()
 a.pl(2,5)
 b.pl(2,4)
-c.pl(1,5)
-d.pl(1,6)
-a._iter()
-
+c.pl(1,4)
+d.pl(3,4)
+b.nb_all()
 class st_player:
     
     def __init__(self, color):
