@@ -30,23 +30,22 @@ class st:
         return lnb
 
 
-    def iter(self):
-
-        # iterating the function in nb:
-        # store all connecting st in list than check positions.
+    def _iter(self):
         temp_nb = []    # hold stone to not iretate same again.
+        hold_nb = []    # temp hold all_nb for stone
         temp_nb.append(self)
             
         # iter ending function     
         for temp in temp_np:
             if self.x == temp.x and self.y == temp.y:
-                return temp
+                # return
 
         # add all connecting stones to _nb_all
         for nb in lnb:
             if nb not in temp_nb:
-                self._all_nb.append(nb.iter()) 
-            
+                hold_nb.append(nb.iter())
+            else:
+                return nb
 
     # Debug, print all neighbours
     def nb_all(self):
