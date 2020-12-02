@@ -40,6 +40,7 @@ class st:
 
 
     def _iter(self):
+        # TODO: Test time with : time.time()
         temp_nb = []    # hold stone to not iretate same again.
         hold_nb = []    # temp hold all_nb for stone
         temp_nb.append(self)
