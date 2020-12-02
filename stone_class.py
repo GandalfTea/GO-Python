@@ -11,6 +11,12 @@ class st:
 
         _all_st.append(self)
 
+    def __str__(self):
+        if self in _pl_str:
+            return "X : " + self.x + " Y : " + self.y
+        else:
+            raise Exception("The stone has not been played yet.")
+
     def pl(self, x, y):
         self.x = x
         self.y = y
