@@ -17,117 +17,85 @@ class st:
         else:
             raise Exception("The stone has not been played yet.")
 
+    # Play a stone
     def pl(self, x, y):
         self.x = x
         self.y = y
         _pl_st.append(self)
-        self.lnb = self.nb()
-        #refreshes the nb of the neighbours
+        self.lnb = self.nb() # Find neighbours
+        
+        # Refreshes the nb of the neighbours
         for i in self.lnb:
             i.lnb = i.nb()
-        #print("string x :", x, "string y :", y)
 
+    # Get immediate nb of stone
     def nb(self):
-        lnb = []
+        lnb = [] # List of neighbours
         for st in _all_st:
-            #print("I will tel you a secreat.")
             if st.x == self.x and st.y == (self.y - 1):
-                #print("I was the wierd duck")
                 lnb.append(st)
             elif st.x == self.x and st.y == (self.y + 1):
-                #print("I was the wierd duck")
                 lnb.append(st)
             elif st.x == (self.x - 1) and st.y == self.y:
-                #print("I was the wierd duck")
                 lnb.append(st)
             elif st.x == (self.x + 1) and st.y == self.y:
-                #print("I was the wierd duck")
                 lnb.append(st)
             else:
                 continue
 
         return lnb
 
+    # Deep nb search
+    def nb_search(self):
+        for nb in self.lnb:
+            nb._iter()
+        return self._iter()
 
+
+    # This function is the stuff of nightmares.
+
+    # It is recursive throw all neighbours until it finds
+    # the first stone again, creating a circle.
+    # TODO: Test time config
+    
     def _iter(self):
-        # TODO: Test time with : time.time()
         temp_nb = []    # hold stone to not iretate same again.
-        hold_nb = []    # temp hold all_nb for stone
-        temp_nb.append(self)
-        oX = self.x
-        oY = self.y
+        hold_nb = []    # temp hold all_nb for original stone
+        o_pos = [self.x, self.y]    # Original stone position
 
         # Propagate the function to all connected neighbours
-        def _feed_forward(self, o_x, o_y, temp_nb):
-            for i in temp_nb:
-                if i.x != self.x and i.y != self.y:
+        def _feed_forward(self, o_pos, temp_nb, distance):
+
+            # End of recursion 
+            if o_pos[0] != self.x or o_pos[1] != self.y:
+                if self not in temp_nb:
+                    temp_nb.append(self)
+            else:
+                # Distance is the layer of nb.
+                # Stops immediate nb from detecting original stone.
+                if distance > 1:
+                    return hold_nb
+                else:
                     temp_nb.append(self)
 
-            # End of recursion
-            if self.x == o_x and self.y == o_y:
-                # Make immidiate nb not recognize you
-                print("This does not work")
-                return []
-
-            # recalibrate the nb 
-            self.nb()
-            print("\n",self)
-            self.nb_all()
-
-            # add all connecting stones to _nb_all
+            # Add all connecting stones to hold_nb
             for nb in self.lnb:
-                print("\nBeginnning")
-                print("temp : ", temp_nb)
-                print("lnb :", self.lnb)
-                if nb not in temp_nb:
-                    print("ffff")
-                    for i in _feed_forward(nb, oX, oY, holf_nb):
+                new_dist = distance + 1
+                for i in _feed_forward(nb, o_pos, hold_nb, new_dist):
+                    if i not in hold_nb:
                         hold_nb.append(i)
-                        holf_nb.append("dicks")
-                    print("currently at : ", nb)
-                else:
-                    continue
 
-                print("DICKS")
+            return hold_nb
 
-            return
-
-        for nb in self.lnb:
-            _feed_forward(nb, oX, oY, temp_nb)
-
-       # DEBUG
-      #  print("\n_iter:")
-       # if temp_nb is None:
-        #    print("Dicks")
-        #else:
-         #   for i in temp_nb:
-          #      print(i)
-
-
-
+        # Add all found stones into original stone's _all_nb
+        self._all_nb.append(_feed_forward(self, o_pos, temp_nb, 1))
+        
     # Debug, print all neighbours
     def nb_all(self):
         if self.lnb is not None:
             for st in self.lnb:
                 print(st)
 
-a = st()
-b = st()
-c = st()
-d = st()
-a.pl(2,5)
-b.pl(2,4)
-c.pl(1,4)
-d.pl(3,4)
-b._iter()
-print("\n A:")
-a.nb_all()
-print("\n B:")
-b.nb_all()
-print("\n C:")
-c.nb_all()
-print("\n D:")
-d.nb_all()
 
 class st_player:
     
