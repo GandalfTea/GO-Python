@@ -23,7 +23,7 @@ class st:
         self.y = y
         _pl_st.append(self)
         self.lnb = self.nb() # Find neighbours
-        self._iter()         # Deep search neighbours 
+        self._iter("line")         # Deep search neighbours 
         # Refreshes the nb of the neighbours
         for i in self.lnb:
             i.lnb = i.nb()
@@ -53,39 +53,50 @@ class st:
     # the first stone again, creating a circle.
     # TODO: Test time config
     
-    def _iter(self):
+    def _iter(self, iter_type):
         temp_nb = []    # hold stone to not iretate same again.
         hold = []    # temp hold all_nb for original stone
         o_pos = [self.x, self.y]    # Original stone position
 
-        # Propagate the function to all connected neighbours
-        def _feed_forward(self, o_pos, distance, hold_nb):
+        if iter_type == "line":
+            # Propagate the function to all connected neighbours
+            def _feed_forward(self, o_pos, distance, hold_nb):
+                if o_pos != [self.x, self.y]: 
+                    if self not in temp_nb:
+                        temp_nb.append(self)
+                    
+                        # Add all connecting stones to hold_nb
+                        for nb in self.lnb:
+                            new_dist = distance + 1
+                            if nb not in hold_nb:
+                                hold_nb.append(nb)
+                            _feed_forward(nb, o_pos, new_dist, hold_nb)
 
-            if o_pos != [self.x, self.y]: 
-                if self not in temp_nb:
-                    temp_nb.append(self)
-                
-                    # Add all connecting stones to hold_nb
-                    for nb in self.lnb:
-                        new_dist = distance + 1
-                        if nb not in hold_nb:
-                            hold_nb.append(nb)
-                        _feed_forward(nb, o_pos, new_dist, hold_nb)
-
-            else:
-                # End of recursion 
-                # Distance is the layer of nb.
-                # Stops immediate nb from detecting original stone.
-                if distance == 1:
-                    temp_nb.append(self)
                 else:
-                    print("Connection confirmed.")
-                    return
+                    # End of recursion 
+                    # Distance is the layer of nb.
+                    # Stops immediate nb from detecting original stone.
+                    if distance == 1:
+                        temp_nb.append(self)
+                    else:
+                        print("Connection confirmed.")
+                        return
 
-        # Add all found stones into original stone's _all_nb
-        for nb in self.lnb:
-            _feed_forward(nb, o_pos, 1, hold)
-        self._all_nb.append(hold)
+            # Add all found stones into original stone's _all_nb
+            for nb in self.lnb:
+                _feed_forward(nb, o_pos, 1, hold)
+            self._all_nb.append(hold)
+    
+        # Iterate and find groups of connected stones
+        elif iter_type == "group":
+            def _feed_forward(self):
+                if self not in hold:
+                    hold.append(self)
+
+                for nb in self.lnb:
+                    _feed_forward(nb)
+            _feed_forward(self)
+            
         
     # Debug, print all neighbours
     def nb_all(self):
