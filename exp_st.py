@@ -12,6 +12,16 @@ c.pl(3,3)
 
 d = st()
 d.pl(4,3)
-print(b._all_nb)
-for i in b._all_nb:
+
+e = st()
+e.pl(5,2)
+
+f = st()
+f.pl(5,3)
+f.deep_nb()
+print("\n")
+for i in f._all_nb:
+    print(i)
+print("\n")
+for i in f._connected:
     print(i)
