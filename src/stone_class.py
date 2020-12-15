@@ -1,3 +1,4 @@
+from board import board
 
 _all_st = []    #all stones
 _pl_st = []     #played stones
@@ -10,6 +11,7 @@ class st:
         self._connected = []
         self.is_connected = False
         self.c = ""
+        self.lnb = []
 
         _all_st.append(self)
 
@@ -23,34 +25,44 @@ class st:
     def pl(self, x, y):
         self.x = x
         self.y = y
+
+        board[x][y] = self
+
         _pl_st.append(self)
         self.nb()           # Find neighbours
         self.deep_nb()      # Deep search neighbours 
+
         # Refreshes the nb of the neighbours
         for i in self.lnb:
             i.lnb = i.nb()
             i.deep_nb()
 
+
+
     # Get immediate nb of stone
     def nb(self):
         lnb = [] # List of neighbours
-        for st in _all_st:
-            if st.x == self.x and st.y == (self.y - 1):
-                lnb.append(st)
-            elif st.x == self.x and st.y == (self.y + 1):
-                lnb.append(st)
-            elif st.x == (self.x - 1) and st.y == self.y:
-                lnb.append(st)
-            elif st.x == (self.x + 1) and st.y == self.y:
-                lnb.append(st)
-            else:
-                continue
+        if board[self.x][self.y - 1] is not None:
+            lnb.append(board[self.x][self.y - 1])
+
+        if board[self.x][self.y + 1] is not None:
+            lnb.append(board[self.x][self.y + 1])
+
+        if board[self.x - 1][self.y] is not None:
+            lnb.append(board[self.x - 1][self.y])
+
+        if board[self.x + 1][self.y] is not None:
+            lnb.append(board[self.x + 1][self.y])
+
+        else:
+            return
 
         self.lnb = lnb
         return
 
 
 
+    
     # Find connections between stones
     # TODO: Test time config
     def deep_nb(self):
@@ -143,10 +155,4 @@ class st:
 
 # If not all nb are occupied and all nb of unnocupied space are one color
 # That is an eye.
-
-
-
-
-
-
 

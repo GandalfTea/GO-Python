@@ -1,4 +1,4 @@
-import stone_class as st_cls
+import stone_class as stc
 
 class player:
 
@@ -16,7 +16,7 @@ class player:
         self.container = []
 
         for i in range(self.STNUM):
-            self.container.append(st_cls.st())
+            self.container.append(stc.st())
 
         for st in self.container:
             st.c = color
@@ -24,7 +24,7 @@ class player:
 
     def play(self, cord):
         for st in self.container:
-            if st not in st_cls._pl_st:
+            if st not in stc._pl_st:
                 st.pl(cord[0], cord[1])
                 return
 
