@@ -19,7 +19,7 @@ black = player('b')
 move_idx = 0
 
 while True:
-    if move_idx % 2:
+    if move_idx % 2 == 0:
         # move white
         move_idx += 1 
     else:
@@ -30,7 +30,11 @@ while True:
 
 # Ask for move
 # Display board
-# 
+
+# Count Teritory:
+#   adapt the st iterator to empty slots and look
+#   for neighbours.
+
 
 # initialize players
 # give players turn

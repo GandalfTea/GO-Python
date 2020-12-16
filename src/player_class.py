@@ -33,5 +33,3 @@ class player:
         return
 
 
-    # Count teritory
-    # Give a stone to end game
