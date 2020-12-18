@@ -1,16 +1,18 @@
 import PySimpleGUI as sg
 import random
 
-
 MAX_ROWS = MAX_COL = 19
 a = ('O', '@') 
-board = [[random.choices(a) for j in range(MAX_COL)] for i in range(MAX_ROWS)]
-
+board = [['' for j in range(MAX_COL)] for i in range(MAX_ROWS)]
+board_dot_pos = [( 3,3), (3,9), (3,15), (9,3), (9,9), (9,15), (15,3), (15,9), (15,15)]
 layout = []
-#layout += [[sg.Image(r'C:\Users\maria\Desktop\fun\PythonGame\src\stone_black.png', size=(100,100),)]]
+
+# stone_black.png is smaller
+# stone_black2.pmg is bigger
+st_black = './stone_black2.png'
+board_dots = './board_dot.png'
 
 b = []
-
 for i in range(MAX_ROWS):
     a = []
     # Row index
@@ -21,18 +23,22 @@ for i in range(MAX_ROWS):
     # interpunct : u"\xb7"
 
     for j in range(MAX_COL):
-        a += [sg.Button(u"\xb7", button_color=('black', 'white'),border_width=0 ,size=(4,2), key=(i,j), pad=(0,0))]
+        if (i,j) in board_dot_pos:
+            a += [sg.Button("", button_color=('black', 'white'), image_filename=board_dots, border_width=0, size=(4,2), key=(i,j), pad=(0,0))]
+        else:
+            a += [sg.Button(u"\xb7", button_color=('black', 'white'),border_width=0 ,size=(4,2), key=(i,j), pad=(0,0))]
     b += [a]
+
 layout += b
-layout[1] += [sg.Text("\tDebug Console\t\t", background_color = 'white', text_color='black', font='TimesNewRoman')]
 
-layout[2] +=[sg.Text("\t", background_color ='white')] + [sg.Multiline("Debug in progress...")]
+window = sg.Window('GO', layout, background_color='white').Finalize()
 
-window = sg.Window('GO', layout, background_color='white')
+
 while True:
     event, values = window.read()
     if event in (sg.WIN_CLOSED, 'Exit'):
         break
-    window[event].update(board[event[0]][event[1]], button_color=('black', 'white'))
+    window[event].update(board[event[0]][event[1]], button_color=('white', 'white'), image_filename=st_black)
+
 
 window.close()
