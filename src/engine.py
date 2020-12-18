@@ -33,18 +33,16 @@ white = pc.player('w')
 black = pc.player('b')
 move_idx = 0
 
-
-while True:
-    if move_idx % 2 == 0:
-        # move white
-        white.play(ask_move())
-        print_bd()
-        move_idx += 1 
-    else:
-        # move black
-        black.play(ask_move())
-        print_bd()
-        move_idx += 1 
+def Play():
+    while True:
+        if move_idx % 2 == 0:
+            # move white
+            white.play(ask_move())
+            move_idx += 1 
+        else:
+            # move black
+            black.play(ask_move())
+            move_idx += 1 
         
 
 

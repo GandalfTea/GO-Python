@@ -23,6 +23,7 @@ class player:
 
 
     def play(self, cord):
+        print(cord)
         for st in self.container:
             if st not in stc._pl_st:
                 st.pl(cord[0], cord[1])
