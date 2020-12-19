@@ -1,5 +1,8 @@
 from board import board
 
+debug_buffer = []
+debug_buffer.clear()
+
 _all_st = []    #all stones
 _pl_st = []     #played stones
 
@@ -25,16 +28,14 @@ class st:
     def pl(self, x, y):
         self.x = x
         self.y = y
-
+        
         board[x][y] = self
-
+        debug_buffer.append("\nStoned Played at : " + str((self.x, self.y)) + "\nColor : " + ("WHITE" if self.c=='w' else "BLACK"))
         _pl_st.append(self)
-        self.nb()           # Find neighbours
-        self.deep_nb()      # Deep search neighbours 
+        self.deep_nb()      # Deep search neighbours, also close nb 
 
         # Refreshes the nb of the neighbours
         for i in self.lnb:
-            i.lnb = i.nb()
             i.deep_nb()
 
 
@@ -54,10 +55,8 @@ class st:
         if board[self.x + 1][self.y] is not None:
             lnb.append(board[self.x + 1][self.y])
 
-        else:
-            return
-
         self.lnb = lnb
+        debug_buffer.append(str(self) + " : Close neighbour search successful.")
         return
 
 
@@ -81,10 +80,15 @@ class st:
             def _feed_forward(self, distance):
                 global connected
                 self.nb()
-                #print(self)
+
                 # End of recursion 
                 # Distance is the layer of nb.
                 # stops immediate nb from detecting original stone.
+
+                if self.lnb is None:
+                    debug_buffer.append("ERROR : self.lnb is None")
+                    return
+                
                 if not connected:
                     if o_pos in self.lnb and distance > 2:
                         #print("Connection confirmed for :", o_pos)
@@ -92,17 +96,17 @@ class st:
 
                 for nb in self.lnb:
                     if o_pos is not nb:
-                        #print("\t", distance, nb)
-                        #print("Status :", connected)
+
                         # Add all connecting stones to hold_nb
-                        if nb not in hold_all:
-                            if not connected : hold_connected.append(nb)
-                            new_dist = distance + 1
-                            hold_all.append(nb)
-                            _feed_forward(nb, new_dist)
-                            continue
-                        else:
-                            continue
+                        if nb.c == self.c:
+                            if nb not in hold_all:
+                                if not connected : hold_connected.append(nb)
+                                new_dist = distance + 1
+                                hold_all.append(nb)
+                                _feed_forward(nb, new_dist)
+                                continue
+                            else:
+                                continue
 
                 return 
 
@@ -124,6 +128,10 @@ class st:
             for i in hold_newer:
                 if i not in self._connected:
                     self._connected.append(i)
+            debug_buffer.append(str(self) + " : Deep neighbour search successful : _connected")
+            debug_buffer.append("\tStatus : " + str(self.is_connected))
+            for i in self._connected:
+                debug_buffer.append("\t" + str(i))
 
             hold_newer.clear()
 
@@ -131,7 +139,10 @@ class st:
                 if i not in self._all_nb:
                     if i is not self:
                         self._all_nb.append(i)
+            debug_buffer.append(str(self) + " : Deep neighbour search successful : all_nb")
 
+            for i in self._all_nb:
+                debug_buffer.append("\t" + str(i))
             hold_all.clear()
             hold_connected.clear()
 
