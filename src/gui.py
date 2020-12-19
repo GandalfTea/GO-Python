@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import time
 import player_class as pc
 import random
 
@@ -14,6 +15,8 @@ st_black = './stone_black2.png'
 st_white = './stone_white.png'
 board_dots = './board_dot.png'
 exit_button = './exit_button.png'
+stone_white_UI = './stone_white_UI.png'
+stone_black_UI = './stone_black_UI.png'
 
 
 layout = []
@@ -49,12 +52,18 @@ layout += b
 
 # Player data :
 
-layout[14] += [sg.Text("\t", background_color='white')] + [sg.Image(filename=st_black)] + [sg.Text("   Captured : \t", background_color='white', text_color='black', font='lato')]
-layout[15] += [sg.Text("\t", background_color='white')] + [sg.Image(filename=st_white)] + [sg.Text("   Captured : \t", background_color='white', text_color='black', font='lato')]
+layout[14] += [sg.Text("\t", background_color='white')] + [sg.Button(image_filename=stone_black_UI, border_width=0)] + [sg.Text("   Captured : \t",key='-UI1-', background_color='white', text_color='black', font='lato')]
+layout[15] += [sg.Text("\t", background_color='white')] + [sg.Button(image_filename=stone_white_UI, border_width=0)] + [sg.Text("   Captured : \t",key='-UI2-', background_color='white', text_color='black', font='lato')]
+
+# Debug window :
+layout2 = [[sg.Multiline("Debug initialized", key='-MULTILINE KEY-', size=(60,40))]]
 
 # Initialize window :
+# Main window
 
 window = sg.Window('GO', layout, background_color='white', no_titlebar=True, grab_anywhere=True, resizable=True).Finalize()
+
+window2 = sg.Window("Debugger", layout2, resizable=True, grab_anywhere=True, keep_on_top=True, alpha_channel=0.7, background_color='white').Finalize()
 
 # Initialize players :
 white = pc.player('w')
@@ -62,7 +71,6 @@ black = pc.player('b')
 
 
 # Make the keys in the matrix indexes and than access them.
-
 move_idx = 1
 
 # Event loop
@@ -72,12 +80,34 @@ while True:
         break
     if window[event]:
         if move_idx % 2 == 0:
-            window[event].update(board[event[0]][event[1]], button_color=('white', 'white'), image_filename=st_white)
+            a = time.time()
+            window[event].update(board[event[0]][event[1]], button_color=('white', 'lightgray'), image_filename=st_white)
             white.play(window[event].Key)
+            
+            window2['-MULTILINE KEY-'].print("------------------------")
+
+            from stone_class import debug_buffer
+            for i in debug_buffer:
+                window2['-MULTILINE KEY-'].print(i)
+
+            b = time.time()
+            window2['-MULTILINE KEY-'].print("\nTime Elapsed :" + str(b-a))
+            debug_buffer.clear()
             move_idx += 1
+
         else:
-            window[event].update(board[event[0]][event[1]], button_color=('white', 'white'), image_filename=st_black)
+            a = time.time()
+            window[event].update(board[event[0]][event[1]], button_color=('white', 'lightgray'), image_filename=st_black)
             black.play(window[event].Key)
+            window2['-MULTILINE KEY-'].print("------------------------")
+
+            from stone_class import debug_buffer
+            for i in debug_buffer:
+                window2['-MULTILINE KEY-'].print(i)
+
+            b = time.time()
+            window2['-MULTILINE KEY-'].print("\nTime Elapsed :" + str(b-a))
+            debug_buffer.clear()
             move_idx += 1
 
 
