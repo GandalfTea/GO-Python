@@ -11,12 +11,12 @@ board = [['' for j in range(MAX_COL)] for i in range(MAX_ROWS)]
 
 # stone_black.png is smaller
 # stone_black2.pmg is bigger
-st_black = './stone_black2.png'
-st_white = './stone_white.png'
-board_dots = './board_dot.png'
-exit_button = './exit_button.png'
-stone_white_UI = './stone_white_UI.png'
-stone_black_UI = './stone_black_UI.png'
+st_black = './assets/stone_black2.png'
+st_white = './assets/stone_white.png'
+board_dots = './assets/board_dot.png'
+exit_button = './assets/exit_button.png'
+stone_white_UI = './assets/stone_white_UI.png'
+stone_black_UI = './assets/stone_black_UI.png'
 
 
 layout = []
