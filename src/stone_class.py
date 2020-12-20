@@ -32,28 +32,42 @@ class st:
         board[x][y] = self
         debug_buffer.append("\nStoned Played at : " + str((self.x, self.y)) + "\nColor : " + ("WHITE" if self.c=='w' else "BLACK"))
         _pl_st.append(self)
+        self.nb()
         self.deep_nb()      # Deep search neighbours, also close nb 
-
         # Refreshes the nb of the neighbours
+
         for i in self.lnb:
-            i.deep_nb()
+            if i != 0:
+                i.nb()
+                i.deep_nb()
 
 
 
     # Get immediate nb of stone
     def nb(self):
         lnb = [] # List of neighbours
-        if board[self.x][self.y - 1] is not None:
-            lnb.append(board[self.x][self.y - 1])
+        if self.y-1 >= 0:
+            if board[self.x][self.y - 1] is not None:
+                lnb.append(board[self.x][self.y - 1])
+        else:
+            lnb.append(0)
+        if self.y+1 < len(board):
+            if board[self.x][self.y + 1] is not None:
+                lnb.append(board[self.x][self.y + 1])
+        else:
+            lnb.append(0)
 
-        if board[self.x][self.y + 1] is not None:
-            lnb.append(board[self.x][self.y + 1])
+        if self.x-1 >= 0:
+            if board[self.x - 1][self.y] is not None:
+                lnb.append(board[self.x - 1][self.y])
+        else:
+            lnb.append(0)
 
-        if board[self.x - 1][self.y] is not None:
-            lnb.append(board[self.x - 1][self.y])
-
-        if board[self.x + 1][self.y] is not None:
-            lnb.append(board[self.x + 1][self.y])
+        if self.x+1 < len(board):
+            if board[self.x + 1][self.y] is not None:
+                lnb.append(board[self.x + 1][self.y])
+        else:
+            lnb.append(0)
 
         self.lnb = lnb
         debug_buffer.append(str(self) + " : Close neighbour search successful.")
@@ -79,8 +93,6 @@ class st:
             # WORK : Iterate through neighbours until it finds the original stone
             def _feed_forward(self, distance):
                 global connected
-                self.nb()
-
                 # End of recursion 
                 # Distance is the layer of nb.
                 # stops immediate nb from detecting original stone.
@@ -95,6 +107,9 @@ class st:
                         connected = True
 
                 for nb in self.lnb:
+                    if nb == 0:
+                        continue
+
                     if o_pos is not nb:
 
                         # Add all connecting stones to hold_nb
@@ -149,6 +164,70 @@ class st:
         _iter(self)
 
 
+    # Checks to see if stone and nb are captured.
+    # if nb is 0, it is the margin of the play table.
+    # RETURN : (color, length, stone/s)
+    def capture(self):
+
+        if len(self.lnb) != 4:
+            debug_buffer.append(str(self) + " : Not enough neighbours for capture : " + str(len(self.lnb)))
+            return None
+
+        debug_buffer.append("Capture search engaged for : " + str(self))
+
+        # Group capture search comes first to permit the use of eyes.
+
+        # Group capture search
+        temp = []           # Hold stone to not iterate again.
+        same_color = []      # Hold all same color stone to capture.
+        b_same_color = []   # Hold bool all the same colored stones to iterate.
+
+        # If there are any same colored nb than commit to group search
+        if any(nb.c == self.c for nb in self.lnb):
+
+            def iter(self):
+                if len(self.lnb) != 4:
+                    debug_buffer.append(str(self) + " : Not enough neighbours for group capture : " + str(len(self.lnb)))
+                    return None
+
+                temp.append(self)
+            
+                # Iterate through all same color stones
+                for nb in self.lnb:
+                    if nb not in temp:
+                        if nb == 0:
+                            debug_buffer.append("nb is 0.")
+                            b_same_color.append(True)
+                            continue
+                        elif nb.c == self.c:
+                            debug_buffer.append("Iterating : " + str(nb))
+                            same_color.append(nb)
+                            b_same_color.append(iter(nb))
+                return True
+
+            # If all are captured, the group is captured.
+            iter(self)
+            debug_buffer.append("b_same_color : " + str(b_same_color))
+            if b_same_color is not None and all(b_same_color):
+                # Capture stones
+                for st in same_color:
+                    board[st.x][st.y] = None
+                debug_buffer.append("Group capture.")
+                return ('w' if str(same_color[0]) == 'w' else 'b', len(same_color), same_color)
+            else:
+                debug_buffer.append("No capture found.")
+                return None
+
+        # Solo capture search
+        else:      
+            if all(nb == 0 or nb.c!=self.c for nb in self.lnb):
+                board[self.x][self.y] = None
+                debug_buffer.append("Solo capture")
+                return ('w' if str(self.c) == 'w' else 'b',1, [self])
+            else:
+                return None
+
+
     def getColor(self):
         return self.c
         
@@ -159,11 +238,4 @@ class st:
                 print(st)
 
 
-# BUNDLE :
-# If all nb of one color are occupied, the bundle is captured
-# Because if nb is black the bundle is bigger
-# And if all nb occupied, it would eventually be white.
-
-# If not all nb are occupied and all nb of unnocupied space are one color
-# That is an eye.
 
