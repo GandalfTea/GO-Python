@@ -14,11 +14,11 @@ board = [['' for j in range(MAX_COL)] for i in range(MAX_ROWS)]
 # stone_black2.pmg is bigger
 st_black = './assets/stone_black2.png'
 st_white = './assets/stone_white.png'
-board_dots = './assets/board_dot.png'
+board_dots = './assets/board_dot_big.png'
 exit_button = './assets/exit_button.png'
 stone_white_UI = './assets/stone_white_UI.png'
 stone_black_UI = './assets/stone_black_UI.png'
-
+board_dot = './assets/board_dot.png'
 
 layout = []
 
@@ -45,7 +45,7 @@ for i in range(MAX_ROWS):
         if (i,j) in board_dot_pos:
             a += [sg.Button("", button_color=('black', 'white'), image_filename=board_dots, border_width=0, size=(4,2), key=(i,j), pad=(0,0))]
         else:
-            a += [sg.Button(u"\xb7", button_color=('black', 'white'),border_width=0 ,size=(4,2), key=(i,j), pad=(0,0))]
+            a += [sg.Button("", image_filename=board_dot, button_color=('black', 'white'),border_width=0 ,size=(4,2), key=(i,j), pad=(0,0))]
     b += [a]
 
 layout += b
@@ -73,20 +73,15 @@ black = pc.player('b')
 
 def capture_stones(group):
     if group is not None:
-        if group[0] == 'w':
-            if len(group[2]) > 1:
-                for nb in group[2]:
-                    window[(nb.x, nb.y)].update(u"\xb7", button_color=('black', 'white'), image_filename='') 
-                white.captured += group[1]
-            elif len(group[2]) == 1:
-                window[(group[2][0].x, group[2][0].y)].update(u"\xb7", button_color=('black', 'white'), image_filename='') 
-        elif temp[0] == 'b':
-            if len(group[2]) > 1:
-                for nb in group[2]:
-                    window[(nb.x, nb.y)].update(u"\xb7", button_color=('black', 'white'), image_filename='') 
-                black.captured += group[1]
-            elif len(group[2]) == 1:
-                window[(group[2][0].x, group[2][0].y)].update(u"\xb7", image_filename='', button_color=('black', 'white')) 
+        if len(group[2]) > 1:
+            for nb in group[2]:
+                window[(nb.x, nb.y)].Update(image_filename=board_dot) 
+            if group[0]=='w' : white.captured += group[1]
+            elif group[0]=='b' : black.captured += group[1]
+        elif len(group[2]) == 1:
+            window[(group[2][0].x, group[2][0].y)].Update(image_filename=board_dot) 
+            if group[0]=='w' : white.captured += group[1]
+            elif group[0]=='b' : black.captured += group[1]
 
 
 
@@ -101,7 +96,7 @@ while True:
     if window[event]:
         if move_idx % 2 == 0:
             a = time.time()
-            window[event].update(board[event[0]][event[1]], button_color=('white', 'lightgray'), image_filename=st_white)
+            window[event].update(board[event[0]][event[1]], button_color=('white', 'white'), image_filename=st_white)
 
             # Play stone and search for capture :
             st = white.play(window[event].Key)
@@ -129,7 +124,7 @@ while True:
 
         else:
             a = time.time()
-            window[event].update(board[event[0]][event[1]], button_color=('white', 'lightgray'), image_filename=st_black)
+            window[event].update("", button_color=('white', 'lightgray'), image_filename=st_black)
             st = black.play(window[event].Key)
             
             temp = black.capture(st)

@@ -191,7 +191,8 @@ class st:
                     return None
 
                 temp.append(self)
-            
+                same_color.append(self)
+                
                 # Iterate through all same color stones
                 for nb in self.lnb:
                     if nb not in temp:
