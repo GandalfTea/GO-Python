@@ -24,25 +24,24 @@ class player:
 
     def play(self, cord):
         for st in self.container:
-            if st not in stc._pl_st:
+            if (st.x,st.y) not in stc._pl_st:
                 st.pl(cord[0], cord[1])
                 return st
 
 
+    # Check self and nb for capture
+    # this may each return a captured group or just a captured stone.
+    # add all retulting captures to and return groups[]
     def capture(self, st):
 
         groups = []
 
-        # Check self and nb for capture
-        # this may each return a captured group or just a captured stone.
-        # add all retulting captures to and return groups[]
-
         groups.append(st.capture())
         
-        # Different nb might return different captured groups.
         for nb in st.lnb:
             if nb != 0:
                 groups.append(nb.capture())
+
         if groups is not None:
                 return groups
 

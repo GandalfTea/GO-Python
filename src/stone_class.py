@@ -1,10 +1,11 @@
 from board import board
 
-debug_buffer = []
+debug_buffer = [] # Buffer to transmit debug lines to the GUI.
 debug_buffer.clear()
 
 _all_st = []    #all stones
 _pl_st = []     #played stones
+_captured_st = []
 
 class st:
     def __init__(self):
@@ -19,7 +20,7 @@ class st:
         _all_st.append(self)
 
     def __str__(self):
-        if self in _pl_st:
+        if (self.x,self.y) in _pl_st or (self.x,self.y) in _captured_st:
             return "X : " + str(self.x) + ", Y : " + str(self.y)
         else:
             raise Exception("The stone has not been played yet.")
@@ -28,14 +29,14 @@ class st:
     def pl(self, x, y):
         self.x = x
         self.y = y
-        
-        board[x][y] = self
+        board[x][y] = self  # Play stone
         debug_buffer.append("\nStoned Played at : " + str((self.x, self.y)) + "\nColor : " + ("WHITE" if self.c=='w' else "BLACK"))
-        _pl_st.append(self)
-        self.nb()
-        self.deep_nb()      # Deep search neighbours, also close nb 
-        # Refreshes the nb of the neighbours
+        _pl_st.append((self.x, self.y))
+        self.nb()           # Close neighbour search.
+        self.deep_nb()      # Deep neighbour search.
 
+        # Refreshes the nb of the neighbours
+        debug_buffer.append("Neighbour refresh : ")
         for i in self.lnb:
             if i != 0:
                 i.nb()
@@ -44,6 +45,7 @@ class st:
 
 
     # Get immediate nb of stone
+    # If nb is 0, it is the edge of the board
     def nb(self):
         lnb = [] # List of neighbours
         if self.y-1 >= 0:
@@ -71,6 +73,8 @@ class st:
 
         self.lnb = lnb
         debug_buffer.append(str(self) + " : Close neighbour search successful.")
+        for nb in lnb:
+            debug_buffer.append(nb)
         return
 
 
@@ -78,97 +82,92 @@ class st:
     
     # Find connections between stones
     # TODO: Test time config
+
     def deep_nb(self):
+        hold_connected = []     # temp hold connected
+        hold_all = []           # temp hold all connected
+        o_pos = self            # Original stone position
+        global connected
+        connected = False
 
-        def _iter(self):
-            hold_connected = []     # temp hold connected
-            hold_all = []           # temp hold all connected
-            o_pos = self            # Original stone position
+        # GOAL : Find stones connected in a circle
+        # WORK : Iterate through neighbours until it finds the original stone
+        def _feed_forward(self, distance):
             global connected
-            connected = False
 
-            #print("\nNow on:", self)
+            if self.lnb is None:
+                debug_buffer.append("ERROR : self.lnb is None")
+                return
+            
+            # End of recursion 
+            # Distance is the layer of nb.
+            # stops immediate nb from detecting original stone.
+            if not connected:
+                if o_pos in self.lnb and distance > 2:
+                    connected = True
 
-            # GOAL : Find stones connected in a circle
-            # WORK : Iterate through neighbours until it finds the original stone
-            def _feed_forward(self, distance):
-                global connected
-                # End of recursion 
-                # Distance is the layer of nb.
-                # stops immediate nb from detecting original stone.
+            for nb in self.lnb:
+                if nb == 0:
+                    continue
 
-                if self.lnb is None:
-                    debug_buffer.append("ERROR : self.lnb is None")
-                    return
-                
-                if not connected:
-                    if o_pos in self.lnb and distance > 2:
-                        #print("Connection confirmed for :", o_pos)
-                        connected = True
+                if o_pos is not nb:
+                    # Add all connecting stones to hold_nb
+                    if nb.c == self.c:
+                        if nb not in hold_all:
+                            if not connected : hold_connected.append(nb)
+                            new_dist = distance + 1
+                            hold_all.append(nb)
+                            _feed_forward(nb, new_dist)
+                            continue
+                        else:
+                            continue
 
-                for nb in self.lnb:
-                    if nb == 0:
-                        continue
+            return 
 
-                    if o_pos is not nb:
-
-                        # Add all connecting stones to hold_nb
-                        if nb.c == self.c:
-                            if nb not in hold_all:
-                                if not connected : hold_connected.append(nb)
-                                new_dist = distance + 1
-                                hold_all.append(nb)
-                                _feed_forward(nb, new_dist)
-                                continue
-                            else:
-                                continue
-
-                return 
-
-            # Say that stone is connected
-            _feed_forward(self, 1)
-            if connected:
-                for i in hold_connected:
-                    i.is_connected = True
-
-
-            # This is shit. Just cleaning my ass.
-            # Add all found stones into respective container
-            hold_newer = []
-
+        # Say that stone is connected
+        _feed_forward(self, 1)
+        if connected:
             for i in hold_connected:
-                if i not in hold_newer:
-                    if i is not self:
-                        hold_newer.append(i)
-            for i in hold_newer:
-                if i not in self._connected:
-                    self._connected.append(i)
-            debug_buffer.append(str(self) + " : Deep neighbour search successful : _connected")
-            debug_buffer.append("\tStatus : " + str(self.is_connected))
-            for i in self._connected:
-                debug_buffer.append("\t" + str(i))
-
-            hold_newer.clear()
-
-            for i in hold_all:
-                if i not in self._all_nb:
-                    if i is not self:
-                        self._all_nb.append(i)
-            debug_buffer.append(str(self) + " : Deep neighbour search successful : all_nb")
-
-            for i in self._all_nb:
-                debug_buffer.append("\t" + str(i))
-            hold_all.clear()
-            hold_connected.clear()
-
-        _iter(self)
+                i.is_connected = True
 
 
-    # Checks to see if stone and nb are captured.
-    # if nb is 0, it is the margin of the play table.
-    # RETURN : (color, length, stone/s)
+        # This is shit. Just cleaning my ass.
+        # Add all found stones into respective container
+        hold_newer = []
+
+        for i in hold_connected:
+            if i not in hold_newer:
+                if i is not self:
+                    hold_newer.append(i)
+        for i in hold_newer:
+            if i not in self._connected:
+                self._connected.append(i)
+        debug_buffer.append(str(self) + " : Deep neighbour search successful : _connected")
+        debug_buffer.append("\tStatus : " + str(self.is_connected))
+        for i in self._connected:
+            debug_buffer.append("\t" + str(i))
+
+        hold_newer.clear()
+
+        for i in hold_all:
+            if i not in self._all_nb:
+                if i is not self:
+                    self._all_nb.append(i)
+        debug_buffer.append(str(self) + " : Deep neighbour search successful : all_nb")
+
+        for i in self._all_nb:
+            debug_buffer.append("\t" + str(i))
+        hold_all.clear()
+        hold_connected.clear()
+
+
+
+    # DO : Checks to see if stone and nb are captured.
+    # If nb is 0, it is the margin of the play table.
+    # RETURN : (color, number of stones captured, stone/s)
+
     def capture(self):
-
+        # If not all the neighbours are occupies, return None.
         if len(self.lnb) != 4:
             debug_buffer.append(str(self) + " : Not enough neighbours for capture : " + str(len(self.lnb)))
             return None
@@ -179,11 +178,11 @@ class st:
 
         # Group capture search
         temp = []           # Hold stone to not iterate again.
-        same_color = []      # Hold all same color stone to capture.
-        b_same_color = []   # Hold bool all the same colored stones to iterate.
+        same_color = []      # Hold all captured stone to return.
+        b_same_color = []   # Hold bool from iter() of same colored stones to check group capture.
 
         # If there are any same colored nb than commit to group search
-        if any(nb.c == self.c for nb in self.lnb):
+        if any(nb.c == self.c or nb == 0 for nb in self.lnb):
 
             def iter(self):
                 if len(self.lnb) != 4:
@@ -197,23 +196,23 @@ class st:
                 for nb in self.lnb:
                     if nb not in temp:
                         if nb == 0:
-                            debug_buffer.append("nb is 0.")
                             b_same_color.append(True)
                             continue
                         elif nb.c == self.c:
                             debug_buffer.append("Iterating : " + str(nb))
-                            same_color.append(nb)
                             b_same_color.append(iter(nb))
                 return True
 
             # If all are captured, the group is captured.
             iter(self)
-            debug_buffer.append("b_same_color : " + str(b_same_color))
             if b_same_color is not None and all(b_same_color):
-                # Capture stones
+                # Remove stones from board
                 for st in same_color:
+                    _pl_st.remove((st.x,st.y))
+                    _captured_st.append((st.x,st.y))
                     board[st.x][st.y] = None
                 debug_buffer.append("Group capture.")
+                # Return stones so as to remove them from the GUI.
                 return ('w' if str(same_color[0]) == 'w' else 'b', len(same_color), same_color)
             else:
                 debug_buffer.append("No capture found.")
@@ -223,6 +222,8 @@ class st:
         else:      
             if all(nb == 0 or nb.c!=self.c for nb in self.lnb):
                 board[self.x][self.y] = None
+                _pl_st.remove((self.x,self.y))
+                _captured_st.append((self.x,self.y))
                 debug_buffer.append("Solo capture")
                 return ('w' if str(self.c) == 'w' else 'b',1, [self])
             else:
