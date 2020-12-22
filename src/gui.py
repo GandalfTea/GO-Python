@@ -12,20 +12,21 @@ MAX_ROWS = MAX_COL = 19
 
 # Import assets :
 
-st_black = './assets/stone_black2.png'
-st_white = './assets/stone_white.png'
-board_dots = './assets/board_dot_big.png'
-exit_button = './assets/exit_button.png'
-stone_white_UI = './assets/stone_white_UI.png'
-stone_black_UI = './assets/stone_black_UI.png'
-board_dot = './assets/board_dot.png'
+st_black = './assets/stone_black2_gray.png'
+st_white = './assets/stone_white_gray.png'
+board_dots = './assets/board_dot_big_gray.png'
+exit_button = './assets/exit_button_2.png'
+stone_white_UI = './assets/stone_white_gray.png'
+stone_black_UI = './assets/stone_black2_gray.png'
+board_dot = './assets/board_dot_2_gray.png'
 
 layout = []
 
+
 # Exit button :
 # This is stupid bad, haha 
-layout += [[sg.Text("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", background_color='white')] \
-          + [sg.Button(image_filename=exit_button, button_color=('white', 'white'),border_width=0, key='Exit')]]
+layout += [[sg.Text("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", background_color='#F1F1F1')] \
+          + [sg.Button(image_filename=exit_button, image_size=(10,10), button_color=('white', 'white'),border_width=0, key='Exit')]]
 
 # Bigger dot board positions
 board_dot_pos = [( 3,3), (3,9), (3,15), (9,3), (9,9), (9,15), (15,3), (15,9), (15,15)]
@@ -35,7 +36,8 @@ board_dot_pos = [( 3,3), (3,9), (3,15), (9,3), (9,9), (9,15), (15,3), (15,9), (1
 b = []
 for i in range(MAX_ROWS):
     a = []
-
+    
+    a += [sg.Text("  ", background_color='#F1F1F1')]
     # 2 choices for display :
     # grid : " | \n-----|-----\n | "
     # interpunct : u"\xb7"
@@ -55,16 +57,18 @@ layout += b
 
 # Captured UI elements :
 
-layout[14] += [sg.Text("\t", background_color='white')] \
-              + [sg.Button(image_filename=stone_black_UI, border_width=0)] \
-              + [sg.Text("   Captured : ", background_color='white', text_color='black', font='lato')] \
-              + [sg.Text("",key='-UI1-', background_color='white',text_color='black', font='lato')]
+layout[15] += [sg.Text("   ", background_color='#F1F1F1')] \
+              + [sg.Button(image_filename=stone_black_UI, key='-NONE-', border_width=0)] \
+              + [sg.Text("   Captured : ", background_color='#F1F1F1', text_color='black', font='lato')] \
+              + [sg.Text("",key='-UI1-', background_color='#F1F1F1',text_color='black', font='lato')]
 
 
-layout[15] += [sg.Text("\t", background_color='white')] \
-               + [sg.Button(image_filename=stone_white_UI, border_width=0)] \
-               + [sg.Text("   Captured : ", background_color='white', text_color='black', font='lato')] \
-               + [sg.Text("", background_color='white', key='-UI2-', text_color='black', font='lato')]
+layout[16] += [sg.Text("   ", background_color='#F1F1F1')] \
+               + [sg.Button(image_filename=stone_white_UI, key='-NONE2-', border_width=0)] \
+               + [sg.Text("   Captured : ", background_color='#F1F1F1', text_color='black', font='lato')] \
+               + [sg.Text("", background_color='#F1F1F1', key='-UI2-', text_color='black', font='lato')]
+
+layout += [[sg.Text("  ", background_color='#F1F1F1')]]
 
 # Debug window :
 layout2 = [[sg.Multiline("Debug initialized", key='-MULTILINE KEY-', size=(60,40))]]
@@ -72,7 +76,7 @@ layout2 = [[sg.Multiline("Debug initialized", key='-MULTILINE KEY-', size=(60,40
 
 # Initialize windows :
 
-window = sg.Window('GO', layout, background_color='white', no_titlebar=True,
+window = sg.Window('GO', layout, background_color='#F1F1F1', no_titlebar=True,
                     grab_anywhere=True, resizable=True).Finalize()
 
 window2 = sg.Window("Debugger", layout2, resizable=True, grab_anywhere=True,
@@ -106,12 +110,14 @@ while True:
     event, values = window.read()
     if event in (sg.WIN_CLOSED, 'Exit'):
         break
-    if window[event]:
+    if window[event].Key == '-NONE-' or window[event].Key == '-NONE2-':
+        continue
+    if window[event] != '-NONE-' and window[event].Key != '-NONE2-':
         if move_idx % 2 == 0:
             a = time.time()
 
             if window[event].Key not in sc._pl_st:
-                # If a stone is not already played in that spot. 
+
                 window[event].update(button_color=('white', 'white'), image_filename=st_white)
 
                 # Play stone :

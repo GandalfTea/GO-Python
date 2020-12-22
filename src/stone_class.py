@@ -182,7 +182,7 @@ class st:
         b_same_color = []   # Hold bool from iter() of same colored stones to check group capture.
 
         # If there are any same colored nb than commit to group search
-        if any(nb.c == self.c or nb == 0 for nb in self.lnb):
+        if any(nb == 0 or nb.c == self.c for nb in self.lnb):
 
             def iter(self):
                 if len(self.lnb) != 4:
