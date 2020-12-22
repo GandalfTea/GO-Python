@@ -29,8 +29,11 @@ class st:
     def pl(self, x, y):
         self.x = x
         self.y = y
+
         board[x][y] = self  # Play stone
+
         debug_buffer.append("\nStoned Played at : " + str((self.x, self.y)) + "\nColor : " + ("WHITE" if self.c=='w' else "BLACK"))
+
         _pl_st.append((self.x, self.y))
         self.nb()           # Close neighbour search.
         self.deep_nb()      # Deep neighbour search.
@@ -208,12 +211,13 @@ class st:
             if b_same_color is not None and all(b_same_color):
                 # Remove stones from board
                 for st in same_color:
-                    _pl_st.remove((st.x,st.y))
+                    if (st.x,st.y) in _pl_st:
+                        _pl_st.remove((st.x,st.y))
                     _captured_st.append((st.x,st.y))
                     board[st.x][st.y] = None
                 debug_buffer.append("Group capture.")
                 # Return stones so as to remove them from the GUI.
-                return ('w' if str(same_color[0]) == 'w' else 'b', len(same_color), same_color)
+                return ('w' if str(same_color[0].c) == 'w' else 'b', len(same_color), same_color)
             else:
                 debug_buffer.append("No capture found.")
                 return None
@@ -222,7 +226,8 @@ class st:
         else:      
             if all(nb == 0 or nb.c!=self.c for nb in self.lnb):
                 board[self.x][self.y] = None
-                _pl_st.remove((self.x,self.y))
+                if (self.x,self.y) in _pl_st:
+                    _pl_st.remove((self.x,self.y))
                 _captured_st.append((self.x,self.y))
                 debug_buffer.append("Solo capture")
                 return ('w' if str(self.c) == 'w' else 'b',1, [self])

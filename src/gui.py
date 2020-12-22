@@ -26,7 +26,7 @@ layout = []
 # Exit button :
 # This is stupid bad, haha 
 layout += [[sg.Text("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", background_color='#F1F1F1')] \
-          + [sg.Button(image_filename=exit_button, image_size=(10,10), button_color=('white', 'white'),border_width=0, key='Exit')]]
+          + [sg.Button(image_filename=exit_button, image_size=(12,12), button_color=('white', 'white'),border_width=0, key='Exit')]]
 
 # Bigger dot board positions
 board_dot_pos = [( 3,3), (3,9), (3,15), (9,3), (9,9), (9,15), (15,3), (15,9), (15,15)]
@@ -57,16 +57,16 @@ layout += b
 
 # Captured UI elements :
 
-layout[15] += [sg.Text("   ", background_color='#F1F1F1')] \
-              + [sg.Button(image_filename=stone_black_UI, key='-NONE-', border_width=0)] \
-              + [sg.Text("   Captured : ", background_color='#F1F1F1', text_color='black', font='lato')] \
-              + [sg.Text("",key='-UI1-', background_color='#F1F1F1',text_color='black', font='lato')]
-
-
 layout[16] += [sg.Text("   ", background_color='#F1F1F1')] \
+              + [sg.Button(image_filename=stone_black_UI, key='-NONE-', border_width=0)] \
+              + [sg.Text("   Captured : ", background_color='#F1F1F1', key='-NONE_TEXT_1_1-', text_color='black', font='lato')] \
+              + [sg.Text("0",key='-UI1-', background_color='#F1F1F1',text_color='black', font='lato')]
+
+
+layout[17] += [sg.Text("   ", background_color='#F1F1F1')] \
                + [sg.Button(image_filename=stone_white_UI, key='-NONE2-', border_width=0)] \
                + [sg.Text("   Captured : ", background_color='#F1F1F1', text_color='black', font='lato')] \
-               + [sg.Text("", background_color='#F1F1F1', key='-UI2-', text_color='black', font='lato')]
+               + [sg.Text("0", background_color='#F1F1F1', key='-UI2-', text_color='black', font='lato')]
 
 layout += [[sg.Text("  ", background_color='#F1F1F1')]]
 

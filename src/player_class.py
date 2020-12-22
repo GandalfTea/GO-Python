@@ -35,14 +35,17 @@ class player:
     def capture(self, st):
 
         groups = []
+        if st is not None:
 
-        groups.append(st.capture())
-        
-        for nb in st.lnb:
-            if nb != 0:
-                groups.append(nb.capture())
-
-        if groups is not None:
+            for nb in st.lnb:
+                if nb != 0:
+                    groups.append(nb.capture())
+            if groups is not None:
                 return groups
+
+            groups.append(st.capture())
+
+            if groups is not None:
+                    return groups
 
 
