@@ -126,6 +126,12 @@ while True:
         continue
     if window[event].Key == '-RESIGN-':
 
+            if move_idx % 2 == 0:
+                window[event].update(button_color=('white', 'white'), image_filename=st_white)
+            else:
+                window[event].update("", button_color=('white', 'white'), image_filename=st_black)
+
+
             window['-ICON1-'].Update(image_filename=stone_black_captured)
             window['-TEXT_UI1-'].update(text_color='#909090')
             window['-UI1-'].update(text_color='#909090')
