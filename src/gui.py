@@ -17,7 +17,9 @@ st_white = './assets/stone_white_gray.png'
 board_dots = './assets/board_dot_big_gray.png'
 exit_button = './assets/exit_button_2.png'
 stone_white_UI = './assets/stone_white_gray.png'
+stone_white_captured = './assets/stone_white_captured.png'
 stone_black_UI = './assets/stone_black2_gray.png'
+stone_black_captured = './assets/stone_black_captured.png'
 board_dot = './assets/board_dot_2_gray.png'
 settings_button = './assets/settings_2.png'
 window_settings = './assets/window_settings.png'
@@ -61,15 +63,21 @@ layout += b
 
 # Captured UI elements :
 
-layout[16] += [sg.Text("   ", background_color='#F1F1F1')] \
-              + [sg.Button(image_filename=stone_black_UI, key='-NONE-', border_width=0)] \
-              + [sg.Text("   Captured : ", background_color='#F1F1F1', key='-NONE_TEXT_1_1-', text_color='black', font='lato')] \
+layout[13] += [sg.Text("      ", background_color='#F1F1F1')] \
+            + [sg.Button("", button_color=('black', 'white'), 
+                         image_filename=board_dot, border_width=0,
+                         size=(4,2), key=('-RESIGN-'), pad=(0,0))]
+
+
+layout[16] += [sg.Text("     ", background_color='#F1F1F1')] \
+              + [sg.Button(image_filename=stone_black_UI, key='-ICON1-', border_width=0)] \
+              + [sg.Text(" Captured : ", key='-TEXT_UI1-', background_color='#F1F1F1', text_color='black', font='lato')] \
               + [sg.Text("0",key='-UI1-', background_color='#F1F1F1',text_color='black', font='lato')]
 
 
-layout[17] += [sg.Text("   ", background_color='#F1F1F1')] \
-               + [sg.Button(image_filename=stone_white_UI, key='-NONE2-', border_width=0)] \
-               + [sg.Text("   Captured : ", background_color='#F1F1F1', text_color='black', font='lato')] \
+layout[17] += [sg.Text("     ", background_color='#F1F1F1')] \
+               + [sg.Button(image_filename=stone_white_UI, key='-ICON2-', border_width=0)] \
+               + [sg.Text(" Captured : ", key='-TEXT_UI2-', background_color='#F1F1F1', text_color='black', font='lato')] \
                + [sg.Text("0", background_color='#F1F1F1', key='-UI2-', text_color='black', font='lato')]
 
 layout += [[sg.Text("  ", background_color='#F1F1F1')]]
@@ -116,9 +124,29 @@ while True:
         break
     if window[event].Key == '-NONE-' or window[event].Key == '-NONE2-':
         continue
-    if window[event] != '-NONE-' and window[event].Key != '-NONE2-':
+    if window[event].Key == '-RESIGN-':
+
+            window['-ICON1-'].Update(image_filename=stone_black_captured)
+            window['-TEXT_UI1-'].update(text_color='#909090')
+            window['-UI1-'].update(text_color='#909090')
+    
+            window['-ICON2-'].Update(image_filename=stone_white_captured)
+            window['-TEXT_UI2-'].update(text_color='#909090')
+            window['-UI2-'].update(text_color='#909090')
+           
+
+    if window[event] != '-NONE-' and window[event].Key != '-NONE2-' and window[event].Key != '-RESIGN-':
         if move_idx % 2 == 0:
             a = time.time()
+
+            # Update UI
+            window['-ICON1-'].Update(image_filename=stone_black_UI)
+            window['-TEXT_UI1-'].update(text_color='black')
+            window['-UI1-'].update(text_color='black')
+    
+            window['-ICON2-'].Update(image_filename=stone_white_captured)
+            window['-TEXT_UI2-'].update(text_color='#909090')
+            window['-UI2-'].update(text_color='#909090')
 
             if window[event].Key not in sc._pl_st:
 
@@ -155,6 +183,15 @@ while True:
 
         else:
             a = time.time()
+
+            # Update UI
+            window['-ICON2-'].Update(image_filename=stone_white_UI)
+            window['-TEXT_UI2-'].update(text_color='black')
+            window['-UI2-'].update(text_color='black')
+    
+            window['-ICON1-'].Update(image_filename=stone_black_captured)
+            window['-TEXT_UI1-'].update(text_color='#909090')
+            window['-UI1-'].update(text_color='#909090')
 
             if window[event].Key not in sc._pl_st:
                 window[event].update("", button_color=('white', 'white'), image_filename=st_black)
