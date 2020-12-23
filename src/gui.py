@@ -19,6 +19,8 @@ exit_button = './assets/exit_button_2.png'
 stone_white_UI = './assets/stone_white_gray.png'
 stone_black_UI = './assets/stone_black2_gray.png'
 board_dot = './assets/board_dot_2_gray.png'
+settings_button = './assets/settings_2.png'
+window_settings = './assets/window_settings.png'
 
 layout = []
 
@@ -26,7 +28,9 @@ layout = []
 # Exit button :
 # This is stupid bad, haha 
 layout += [[sg.Text("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", background_color='#F1F1F1')] \
-          + [sg.Button(image_filename=exit_button, image_size=(12,12), button_color=('white', 'white'),border_width=0, key='Exit')]]
+        + [sg.Button(image_filename=window_settings, image_size=(17,17), border_width=0, key='WINDOW_Settings')] \
+        + [sg.Text("", background_color='#F1F1F1')] \
+        + [sg.Button(image_filename=exit_button, image_size=(17,17), button_color=('white', 'white'),border_width=0, key='Exit')]]
 
 # Bigger dot board positions
 board_dot_pos = [( 3,3), (3,9), (3,15), (9,3), (9,9), (9,15), (15,3), (15,9), (15,15)]
