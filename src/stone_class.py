@@ -3,9 +3,10 @@ from board import board
 debug_buffer = [] # Buffer to transmit debug lines to the GUI.
 debug_buffer.clear()
 
-_all_st = []    #all stones
-_pl_st = []     #played stones
-_captured_st = []
+_all_st = []        #all stones
+_pl_st = []         #played stones
+_captured_st = []   # captured stones
+
 
 class st:
     def __init__(self):
@@ -15,6 +16,8 @@ class st:
         self._connected = []
         self.is_connected = False
         self.c = ""
+
+        # list of close nb
         self.lnb = []
 
         _all_st.append(self)
@@ -23,10 +26,11 @@ class st:
         if (self.x,self.y) in _pl_st or (self.x,self.y) in _captured_st:
             return "X : " + str(self.x) + ", Y : " + str(self.y)
         else:
-            raise Exception("The stone has not been played yet.")
+            debug_buffer.append("ERROR : " + str(self) + " has not been played yet but tried to print.")
 
     # Play a stone
     def pl(self, x, y):
+        print("pl is called")
         self.x = x
         self.y = y
 
@@ -39,7 +43,7 @@ class st:
         self.deep_nb()      # Deep neighbour search.
 
         # Refreshes the nb of the neighbours
-        debug_buffer.append("Neighbour refresh : ")
+        debug_buffer.append("\nNeighbour refresh : ")
         for i in self.lnb:
             if i != 0:
                 i.nb()
@@ -77,7 +81,7 @@ class st:
         self.lnb = lnb
         debug_buffer.append(str(self) + " : Close neighbour search successful.")
         for nb in lnb:
-            debug_buffer.append(nb)
+            debug_buffer.append("\t" + str(nb))
         return
 
 
@@ -93,8 +97,7 @@ class st:
         global connected
         connected = False
 
-        # GOAL : Find stones connected in a circle
-        # WORK : Iterate through neighbours until it finds the original stone
+        # GOAL : Find stones connected
         def _feed_forward(self, distance):
             global connected
 
@@ -134,32 +137,25 @@ class st:
                 i.is_connected = True
 
 
-        # This is shit. Just cleaning my ass.
         # Add all found stones into respective container
-        hold_newer = []
 
+        self._connected.clear()
         for i in hold_connected:
-            if i not in hold_newer:
-                if i is not self:
-                    hold_newer.append(i)
-        for i in hold_newer:
-            if i not in self._connected:
-                self._connected.append(i)
-        debug_buffer.append(str(self) + " : Deep neighbour search successful : _connected")
-        debug_buffer.append("\tStatus : " + str(self.is_connected))
-        for i in self._connected:
-            debug_buffer.append("\t" + str(i))
+            self._connected.append(i)
 
-        hold_newer.clear()
+        debug_buffer.append(str(self) + (" TRUE" if self.is_connected else " FALSE") +  " : Deep nb search successful : _connected")
 
+        self._all_nb.clear()
         for i in hold_all:
-            if i not in self._all_nb:
-                if i is not self:
-                    self._all_nb.append(i)
+            self._all_nb.append(i)
+
+
         debug_buffer.append(str(self) + " : Deep neighbour search successful : all_nb")
 
+        a = []
         for i in self._all_nb:
             debug_buffer.append("\t" + str(i))
+
         hold_all.clear()
         hold_connected.clear()
 

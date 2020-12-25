@@ -40,6 +40,8 @@ class player:
             for nb in st.lnb:
                 if nb != 0:
                     groups.append(nb.capture())
+                else:
+                    groups.append(0)
             # If there is a nb capture, so not search for self capture.
             if groups is not None:
                 return groups
@@ -48,5 +50,7 @@ class player:
 
             if groups is not None:
                     return groups
+            else:
+                return 0
 
 
