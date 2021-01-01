@@ -189,7 +189,7 @@ class Engine():
 
                         # Play stone :
                         st = white.play(window[event].Key)
-
+                        
                         # Search for capture in self and neighbours :
                         temp = white.capture(st)
                         if temp is not None:

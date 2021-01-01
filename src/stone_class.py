@@ -1,4 +1,5 @@
 from board import board
+import time
 
 debug_buffer = [] # Buffer to transmit debug lines to the GUI.
 debug_buffer.clear()
@@ -10,8 +11,8 @@ _captured_st = []   # captured stones
 
 class st:
     def __init__(self):
-        self.x = 0
-        self.y = 0
+        self.x = 20
+        self.y = 20
         self._all_nb = []
         self._connected = []
         self.is_connected = False
@@ -30,7 +31,6 @@ class st:
 
     # Play a stone
     def pl(self, x, y):
-        print("pl is called")
         self.x = x
         self.y = y
 
@@ -53,6 +53,7 @@ class st:
 
     # Get immediate nb of stone
     # If nb is 0, it is the edge of the board
+
     def nb(self):
         lnb = [] # List of neighbours
         if self.y-1 >= 0:
@@ -78,19 +79,32 @@ class st:
         else:
             lnb.append(0)
 
-        self.lnb = lnb
+
+        # Bias the coming searches for the opposite color by putting it first:
+        n_lnb=[]
+        for a in lnb: 
+            if a != 0 and a.c != self.c:
+                n_lnb.append(a)
+        for a in lnb: 
+            if a not in n_lnb:
+                n_lnb.append(a)
+
+        self.lnb = n_lnb
+
+        # Debug
         debug_buffer.append(str(self) + " : Close neighbour search successful.")
-        for nb in lnb:
+        for nb in n_lnb:
             debug_buffer.append("\t" + str(nb))
+
         return
 
 
 
     
     # Find connections between stones
-    # TODO: Test time config
 
     def deep_nb(self):
+
         hold_connected = []     # temp hold connected
         hold_all = []           # temp hold all connected
         o_pos = self            # Original stone position
@@ -155,7 +169,7 @@ class st:
         a = []
         for i in self._all_nb:
             debug_buffer.append("\t" + str(i))
-
+    
         hold_all.clear()
         hold_connected.clear()
 
@@ -179,11 +193,13 @@ class st:
         temp = []           # Hold stone to not iterate again.
         same_color = []      # Hold all captured stone to return.
         b_same_color = []   # Hold bool from iter() of same colored stones to check group capture.
+        original_pos = self
 
         # If there are any same colored nb than commit to group search
         if any(nb == 0 or nb.c == self.c for nb in self.lnb):
 
             def iter(self):
+                self.nb()
                 if len(self.lnb) != 4:
                     debug_buffer.append(str(self) + " : Not enough neighbours for group capture : " + str(len(self.lnb)))
                     return None
@@ -204,7 +220,7 @@ class st:
 
             # If all are captured, the group is captured.
             iter(self)
-            if b_same_color is not None and all(b_same_color):
+            if len(same_color) > 0 and all(b_same_color):
                 # Remove stones from board
                 for st in same_color:
                     if (st.x,st.y) in _pl_st:
@@ -233,6 +249,12 @@ class st:
 
     def getColor(self):
         return self.c
+
+    def getStatus(self):
+        if (self.x, self.y) in _pl_st:
+            return True
+        else:
+            return False
         
     # Debug, print all neighbours
     def nb_all(self):
