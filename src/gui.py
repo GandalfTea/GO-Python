@@ -1,4 +1,6 @@
 
+from datetime import date
+from datetime import datetime
 import PySimpleGUI as sg
 import time
 from board import BRD_SIZE
@@ -35,6 +37,7 @@ class Engine():
 
         # Exit button :
         # This is stupid bad, haha 
+
         layout += [[sg.Text("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t", background_color='#F1F1F1')] \
                 + [sg.Button(image_filename=window_settings, image_size=(17,17), border_width=0, key='WINDOW_Settings')] \
                 + [sg.Text("", background_color='#F1F1F1')] \
@@ -111,6 +114,11 @@ class Engine():
         white = pc.player('w')
         black = pc.player('b')
 
+
+        # Save game moves :
+        now = datetime.now()
+        save_file = open(("./saves/" + str(date.today()) + now.strftime(", %H-%M-%S") + ".txt"), 'w')
+        save_file.write("Game played on : " + str(date.today()) + " at : " + now.strftime("%H-%M-%S"))
 
 
         # Capture stones
@@ -189,6 +197,7 @@ class Engine():
 
                         # Play stone :
                         st = white.play(window[event].Key)
+                        save_file.write("\n" + str(window[event].Key))
                         
                         # Search for capture in self and neighbours :
                         temp = white.capture(st)
@@ -236,6 +245,7 @@ class Engine():
 
                         # Play stone :
                         st = black.play(window[event].Key)
+                        save_file.write("\n" + str(window[event].Key))
 
                         # Search for capture in self and neighbours :
                         temp = black.capture(st)
@@ -263,6 +273,7 @@ class Engine():
 
                         # Play stone :
                         st = black.play(window[event].Key)
+                        save_file.write("\n" + str(window[event].Key))
 
                         # Search for capture in self and neighbours :
                         temp = black.capture(st)
@@ -294,6 +305,7 @@ class Engine():
 
 
 
+        save_file.close()
         window.close()
 
 a = Engine()
