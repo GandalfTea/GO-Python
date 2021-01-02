@@ -25,7 +25,6 @@ class player:
     def play(self, cord):
         for st in self.container:
             if not st.getStatus():
-                print("Stone is played in player_class.")
                 st.pl(cord[0], cord[1])
                 return st
 
