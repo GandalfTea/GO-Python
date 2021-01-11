@@ -118,7 +118,7 @@ class Engine():
         # Save game moves :
         now = datetime.now()
         save_file = open(("./saves/" + str(date.today()) + now.strftime(", %H-%M-%S") + ".txt"), 'w')
-        save_file.write("Game played on : " + str(date.today()) + " at : " + now.strftime("%H-%M-%S\n"))
+        save_file.write("Game played on : " + str(date.today()) + " at : " + now.strftime("%H-%M-%S"))
 
 
         # Capture stones
