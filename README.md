@@ -1,5 +1,7 @@
 # Python GO Game
 
+&nbsp;
+
 ### Table of Contents :
    * [About](#about)
    * [Usage](#usage)
