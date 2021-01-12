@@ -12,12 +12,13 @@
 &nbsp;
 
 ### About : <a name="about"></a>
-Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI and in the future NN.
+Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI. In the future, play against NN.
 
 #### Highlights :
- * Play a 2 player game of GO.
+ * Play a 2 player game of GO on a modern GUI.
  * Capture stones and groups of stones.
- * Save all moves of played game.
+ * Quick 'how to play' tutorial at the begining.
+ * Save all moves of played game in external file.
 
 &nbsp;
 
@@ -37,6 +38,7 @@ Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI and
 	* Implement a 'start new game' button.
 	* Write every move in a doc and allow recreation of game.
 	* Allow player to save a state of game and come back and try different moves.
+	* Play against neural network.
 
 &nbsp;
 
