@@ -1,4 +1,4 @@
-# Python GO Game
+## Python GO Game
 
 &nbsp;
 
