@@ -10,6 +10,11 @@
 ### About : <a name="about"></a>
 Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI and in the future NN.
 
+Highlights :
+ * Play a 2 player game of GO.
+ * Capture stones and groups of stones.
+ * Save all moves of played game.
+
 ### Usage : <a name="usage"></a>
 	-> git clone https://github.com/GandalfTea/GO-Python
 	-> py gui.py
