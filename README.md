@@ -27,7 +27,7 @@ Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI. In
 
 &nbsp;
 
-### GUI : <a name="gui"></a>
+### GUI Prototype : <a name="gui"></a>
 ![alt text](https://github.com/GandalfTea/GO-Python/blob/main/GUIPrototype.png)
 
 &nbsp;
