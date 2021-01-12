@@ -1,11 +1,11 @@
 # Python GO Game
 
 ### Table of Contents :
-1. [About](#about)
-2. [Usage](#usage)
-3. [GUI](#gui)
-4. [TODO](#TODO)
-5. [Bugs](#bugs)
+   * [About](#about)
+   * [Usage](#usage)
+   * [GUI](#gui)
+   * [TODO](#TODO)
+   * [Bugs](#bugs)
 
 ### About : <a name="about"></a>
 Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI and in the future NN.
