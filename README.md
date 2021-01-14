@@ -24,7 +24,7 @@ Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI. In
 
 ### Usage : <a name="usage"></a>
 
-Prerequisited : PySimpleGUI
+Dependencies : *PySimpleGUI*
 ```
 pip install pysimplegui
 ```
