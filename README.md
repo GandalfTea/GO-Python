@@ -15,7 +15,7 @@ Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI. In
 
 &nbsp;
 
-#### Highlights :
+### Highlights :
  * Play a 2 player game of GO on a modern GUI.
  * Quick tutorial at the beginning of the game.
  * Save all moves of played game in external file.
@@ -45,7 +45,6 @@ Main GUI crashes if debug window is closed.
 &nbsp;
 
 ### TODO : <a name="TODO"></a>
-	* self-capture is not possible
 	* Implement a 'start new game' button.
 	* Write every move in a doc and allow recreation of game.
 	* Allow player to save a state of game and come back and try different moves.
@@ -54,5 +53,6 @@ Main GUI crashes if debug window is closed.
 &nbsp;
 
 ### Active bugs : <a name="bugs"></a>
+	* self-capture is not possible
 	* Capture at corners is not perfect.
 	* Main GUI crashes if debug window is closed.
