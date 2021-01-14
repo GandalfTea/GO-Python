@@ -311,4 +311,3 @@ class Engine():
         save_file.close()
         window.close()
 
-a = Engine()
