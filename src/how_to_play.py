@@ -132,4 +132,3 @@ class Tutorial:
 
         window.close()
 
-a = Tutorial()
