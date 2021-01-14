@@ -23,6 +23,11 @@ Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI. In
 &nbsp;
 
 ### Usage : <a name="usage"></a>
+
+Prerequisited : PySimpleGUI
+```
+pip install pysimplegui
+```
 	-> git clone https://github.com/GandalfTea/GO-Python
 	-> cd src
 	-> py run.py
