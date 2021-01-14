@@ -24,13 +24,16 @@ Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI. In
 
 ### Usage : <a name="usage"></a>
 
-Dependencies : *PySimpleGUI*
+Requires *PySimpleGUI* :
 ```
 pip install pysimplegui
 ```
-	-> git clone https://github.com/GandalfTea/GO-Python
-	-> cd src
-	-> py run.py
+Run :
+```
+-> git clone https://github.com/GandalfTea/GO-Python
+-> cd src
+-> py run.py
+```
 Main GUI crashes if debug window is closed.
 
 
