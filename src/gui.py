@@ -3,6 +3,7 @@ from datetime import date
 from datetime import datetime
 import PySimpleGUI as sg
 import time
+import json
 from board import BRD_SIZE
 import stone_class as sc
 import player_class as pc
@@ -115,34 +116,44 @@ class Engine():
         black = pc.player('b')
 
 
-        # Save game moves :
+        # Save game disct for json file :
         now = datetime.now()
-        save_file = open(("./saves/" + str(date.today()) + now.strftime(", %H-%M-%S") + ".txt"), 'w')
-        save_file.write("Game played on : " + str(date.today()) + " at : " + now.strftime("%H-%M-%S\n"))
+
+        save_data = {}
+        save_data['date'] = str(date.today())
+        save_data['time'] = now.strftime("%H-%M-%S")
+        save_data['type'] = "2 Player" # Hard coded for now.
+        save_data['moves'] = []
 
 
         # Capture stones
+        # Return the stones captured to put them in save file.
         def capture_stones(group):
             if group == 0:
                 return
+            captured_stones = []
             if group is not None:
-                save_file.write("\nCapture : ")
                 if len(group[2]) > 1:
                     for nb in group[2]:
-                        window[(nb.x, nb.y)].Update(image_filename=board_dot) 
-                        save_file.write(" (" + str(nb.x) + " " + str(nb.y) + "),")
+                        window[(nb.x, nb.y)].Update(image_filename=board_dot)
+                        captured_stones.append((nb.x,nb.y))
                     if group[0]=='w' : white.captured += group[1]
                     elif group[0]=='b' : black.captured += group[1]
                 elif len(group[2]) == 1:
                     window[(group[2][0].x, group[2][0].y)].Update(image_filename=board_dot) 
-                    save_file.write(" (" + str(group[2][0].x) + " " + str(group[2][0].y) + "),")
+                    captured_stones.append((group[2][0].x,group[2][0].y))
                     if group[0]=='w' : white.captured += group[1]
                     elif group[0]=='b' : black.captured += group[1]
+            if captured_stones is not None:
+                return captured_stones
+            else:
+                return None
 
 
 
         # Move index
         move_idx = 1
+        save_moves = {}
 
 
         # Event loop
@@ -200,13 +211,20 @@ class Engine():
 
                         # Play stone :
                         st = white.play(window[event].Key)
-                        save_file.write("\n" + str(window[event].Key))
                         
                         # Search for capture in self and neighbours :
                         temp = white.capture(st)
+                        captured = []
                         if temp is not None:
                             for group in temp:
-                                capture_stones(group)
+                                captured.append(capture_stones(group))
+                            dictonary = {'played' : str(window[event].Key),
+                                         'captured' : captured}
+                            save_moves[move_idx] = temp
+                        else:
+                            # Append only move if no capture
+                            save_moves[move_idx] = str(window[event].Key)
+
 
                         # Update the capture UI element :
                         window['-UI1-'].update(str(white.captured))
@@ -248,7 +266,7 @@ class Engine():
 
                         # Play stone :
                         st = black.play(window[event].Key)
-                        save_file.write("\n" + str(window[event].Key))
+                        save_moves[move_idx] = str(window[event].Key)
 
                         # Search for capture in self and neighbours :
                         temp = black.capture(st)
@@ -276,7 +294,7 @@ class Engine():
 
                         # Play stone :
                         st = black.play(window[event].Key)
-                        save_file.write("\n" + str(window[event].Key))
+                        save_moves[move_idx] = str(window[event].Key)
 
                         # Search for capture in self and neighbours :
                         temp = black.capture(st)
@@ -305,9 +323,10 @@ class Engine():
                     window2['-MULTILINE KEY-'].print("\nTime Elapsed :" + str(b-a))
                     debug_buffer.clear()
 
+        save_data['moves'].append(save_moves)
 
+        with open('./saves/save_%s_%s.json'%(str(date.today()), now.strftime("%H-%M-%S")) , 'w') as save:
+            json.dump(save_data, save, indent=2)
 
-
-        save_file.close()
         window.close()
 
