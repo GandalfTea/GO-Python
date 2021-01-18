@@ -18,7 +18,7 @@ Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI. In
 ### Highlights :
  *  2 player game of GO with a modern GUI.
  * Quick tutorial at the beginning of the game.
- * Save all moves of played game in external file.
+ * Save all moves of played game in external json file.
 
 &nbsp;
 
