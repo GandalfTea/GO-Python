@@ -45,6 +45,7 @@ Main GUI crashes if debug window is closed.
 &nbsp;
 
 ### TODO : <a name="TODO"></a>
+ .
 	* Save captured stones in json file.
 	* Implement a 'start new game' button.
 	* Write every move in a doc and allow recreation of game.
@@ -54,6 +55,7 @@ Main GUI crashes if debug window is closed.
 &nbsp;
 
 ### Active bugs : <a name="bugs"></a>
+.
 	* Options button, next to 'X', crashes the program.
 	* self-capture is not possible
 	* Capture at corners is not perfect.
