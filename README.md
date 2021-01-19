@@ -45,18 +45,18 @@ Main GUI crashes if debug window is closed.
 &nbsp;
 
 ### TODO : <a name="TODO"></a>
- .
-	* Save captured stones in json file.
-	* Implement a 'start new game' button.
-	* Write every move in a doc and allow recreation of game.
-	* Allow player to save a state of game and come back and try different moves.
-	* Play against neural network.
+
+   * Save captured stones in json file.
+   * Implement a 'start new game' button.
+   * Write every move in a doc and allow recreation of game.
+   * Allow player to save a state of game and come back and try different moves.
+   * Play against neural network.
 
 &nbsp;
 
 ### Active bugs : <a name="bugs"></a>
-.
-	* Options button, next to 'X', crashes the program.
-	* self-capture is not possible
-	* Capture at corners is not perfect.
-	* Main GUI crashes if debug window is closed.
+
+   * Options button, next to 'X', crashes the program.
+   * self-capture is not possible
+   * Capture at corners is not perfect.
+   * Main GUI crashes if debug window is closed.
