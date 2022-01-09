@@ -1,19 +1,12 @@
-## Python GO Game
-
-
-### Table of Contents :
-   * [About](#about)
-   * [Usage](#usage)
-   * [GUI](#gui)
-   * [TODO](#TODO)
-   * [Bugs](#bugs)
-
-&nbsp;
 
 ### About : <a name="about"></a>
 Project for U30838 Programming Fundamentals. Python GO Game with PySimpleGUI. In the future, play against NN.
 
+
+![alt text](https://github.com/GandalfTea/GO-Python/blob/main/GUIPrototype.png)
+
 &nbsp;
+
 
 ### Highlights :
  *  2 player game of GO with a modern GUI.
@@ -36,11 +29,6 @@ Run :
 ```
 Main GUI crashes if debug window is closed.
 
-
-&nbsp;
-
-### GUI Prototype : <a name="gui"></a>
-![alt text](https://github.com/GandalfTea/GO-Python/blob/main/GUIPrototype.png)
 
 &nbsp;
 
